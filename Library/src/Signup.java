@@ -7,18 +7,16 @@ import javax.swing.JOptionPane;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Loner
  */
 public class Signup extends javax.swing.JFrame {
 
-    
-           Connection conn ;
-           PreparedStatement pst ;
-           ResultSet rs;
-    
+    Connection conn;
+    PreparedStatement pst;
+    ResultSet rs;
+
     public Signup() {
         super("Login");
         initComponents();
@@ -189,11 +187,11 @@ public class Signup extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-             setVisible(false);
-             LoginPage ob= new LoginPage();
-             ob.setVisible(true);
+        setVisible(false);
+        LoginPage ob = new LoginPage();
+        ob.setVisible(true);
 
-            // TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -202,28 +200,25 @@ public class Signup extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-            try{
-                String sql="Insert into Account (Username,Name,SecQue,Answer,Password) values (?,?,?,?,?) ";
-                pst = conn.prepareStatement(sql);
-                pst.setString(1,jTextField1.getText());
-                pst.setString(2,jTextField2.getText());
-                pst.setString(3,(String)jComboBox1.getSelectedItem());
-                pst.setString(4 ,jTextField3.getText());
-                 pst.setString(5 ,jPasswordField1.getText());
-                 pst.execute();
-                 JOptionPane.showMessageDialog(null,"New Account has been created");
-                pst.close();
-               //rs.close();
-                setVisible(false);
-                LoginPage ob = new LoginPage();
-                ob.setVisible(true);
-                
-                
-            }
-            catch(Exception e){
-                JOptionPane.showMessageDialog(null, e);
-            }
+        try {
+            String sql = "Insert into Account (Username,Name,SecQue,Answer,Password) values (?,?,?,?,?) ";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, jTextField1.getText());
+            pst.setString(2, jTextField2.getText());
+            pst.setString(3, (String) jComboBox1.getSelectedItem());
+            pst.setString(4, jTextField3.getText());
+            pst.setString(5, jPasswordField1.getText());
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "New Account has been created");
+            pst.close();
+            //rs.close();
+            setVisible(false);
+            LoginPage ob = new LoginPage();
+            ob.setVisible(true);
 
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed

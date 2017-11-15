@@ -1,21 +1,24 @@
 
+import java.awt.List;
 import java.sql.*;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author root
  */
 public class BrowseBook extends javax.swing.JFrame {
-    
-           Connection conn = null;
-           PreparedStatement pst = null;
-           ResultSet rs;
+
+    Connection conn = null;
+    Statement pst = null;
+    ResultSet rs;
+
     /**
      * Creates new form BrowseBook
      */
@@ -159,6 +162,29 @@ public class BrowseBook extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+
+        ArrayList<Book> books = new ArrayList<>();
+
+        try {
+            conn = DBConnect.DBConnect();
+            pst = conn.createStatement();
+
+            rs = pst.executeQuery("SELECT * FROM Books WHERE status = 'Available'");
+            while (rs.next()) {
+                books.add(new Book(Integer.parseInt(rs.getString("id")), rs.getString("title"), rs.getString("author")));
+            }
+
+            pst.close();
+            rs.close();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+
+        books.forEach((book) -> {
+            System.out.println(book);
+        });
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
