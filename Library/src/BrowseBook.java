@@ -237,21 +237,20 @@ public class BrowseBook extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        for (Book book : allBooks) {
+        conn = DBConnect.DBConnect();
+        allBooks.forEach((book) -> {
             try {
-                if (book.toString().equals(jList2.getSelectedValue()));
+                if (book.toString().equals(jList2.getSelectedValue()))
                 {
-                    String query = "update books set status = 'issued' where id = ?";
+                    String query = "update books set available = 'False', owner = 'stud' where id = ?";
                     PreparedStatement preparedStmt = conn.prepareStatement(query);
                     preparedStmt.setInt(1, book.getId());
-
-                    // execute the java preparedstatement
                     preparedStmt.executeUpdate();
                 }
-            } catch (Exception e) {
-
+            } catch (SQLException e) {
+                System.out.println(e);
             }
-        }
+        });
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jList2ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList2ValueChanged
@@ -271,7 +270,7 @@ public class BrowseBook extends javax.swing.JFrame {
             conn = DBConnect.DBConnect();
             pst = conn.createStatement();
 
-            rs = pst.executeQuery("SELECT * FROM Books WHERE status = 'Available'");
+            rs = pst.executeQuery("SELECT * FROM Books WHERE available = 'True'");
             while (rs.next()) {
                 allBooks.add(new Book(Integer.parseInt(rs.getString("id")), rs.getString("title"), rs.getString("author")));
             }
