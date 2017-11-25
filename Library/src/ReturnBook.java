@@ -1,13 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- *
- * @author root
- */
 public class ReturnBook extends javax.swing.JFrame {
 
     /**
@@ -136,7 +127,8 @@ public class ReturnBook extends javax.swing.JFrame {
             .addComponent(jDesktopPane1)
         );
 
-        pack();
+        setSize(new java.awt.Dimension(406, 319));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed

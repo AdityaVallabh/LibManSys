@@ -2,82 +2,94 @@
 import java.sql.*;
 import javax.swing.JOptionPane;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Loner
- */
 public class ForgotPassword extends javax.swing.JFrame {
-           String ans;
-           Connection conn = null;
-           PreparedStatement pst = null,statement=null;
-           ResultSet rs = null;
+
+    String ans;
+    Connection conn = null;
+    PreparedStatement pst = null, statement = null;
+    ResultSet rs = null;
+
     /**
      * Creates new form ForgotPassword
      */
     public ForgotPassword() {
         super("Login");
         initComponents();
-        DBConnect db = new DBConnect();
-        conn = db.DBConnect();
+        conn = Session.getConn();
     }
-    public void Search(){
-        String s1=jTextField1.getText();
-        
-        String sq1="select * from Account where Username='"+s1+"'";
-        try{
-            pst=conn.prepareStatement(sq1);
-            rs=pst.executeQuery();
-        if(rs.next()){
-            jTextField2.setText(rs.getString(2));
-            jTextField3.setText(rs.getString(3));
-            ans = rs.getString(4);
-            rs.close();
-            pst.close();
-        }
-        else{
+
+    public void Search() {
+        String s1 = jTextField1.getText();
+
+        String sq1 = "select * from Account where Username='" + s1 + "'";
+        try {
+            pst = conn.prepareStatement(sq1);
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                jTextField2.setText(rs.getString(2));
+                jTextField3.setText(rs.getString(3));
+                ans = rs.getString(4);
+                rs.close();
+                pst.close();
+            } else {
+                JOptionPane.showMessageDialog(null, "Wrong Username");
+            }
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Wrong Username");
         }
-        }catch(Exception e){
-                    JOptionPane.showMessageDialog(null, "Wrong Username");
-                }
     }
-    public void Retrive(){
-        String s5=jPasswordField1.getText();
-        String s4=jTextField4.getText();
-        String s3=jTextField3.getText();
-        String s2=jTextField2.getText();
-        String s1=jTextField1.getText();
-        
-        String sq2 = "UPDATE Account SET Username=?, Name=?, SecQue=?, Answer=?, Password=? WHERE Username='"+s1+"'";
-        if(ans.equals(s4)){
-            try{
+
+    public void Retrive() {
+        String s5 = jPasswordField1.getText();
+        String s4 = jTextField4.getText();
+        String s3 = jTextField3.getText();
+        String s2 = jTextField2.getText();
+        String s1 = jTextField1.getText();
+        //String s6;
+        try {
+            if (s1.equals("") || s4.equals("")) {
+                throw new ArithmeticException();
+            }
+
+        } catch (ArithmeticException e) {
+            JOptionPane.showMessageDialog(null, "Enter All Required Fields");
+        }
+
+        String sq2 = "UPDATE Account SET Username=?, Name=?, SecQue=?, Answer=?, Password=? WHERE Username='" + s1 + "'";
+        if (ans.equals(s4)) {
+            try {
                 statement = conn.prepareStatement(sq2);
                 statement.setString(1, s1);
                 statement.setString(2, s2);
                 statement.setString(3, s3);
                 statement.setString(4, s4);
                 statement.setString(5, s5);
+                //statement.setString(6, s6);
                 int rowsUpdated = statement.executeUpdate();
                 statement.close();
+                if (jPasswordField1.getText().equals("")) {
+                    throw new NullPointerException();
+                }
                 if (rowsUpdated > 0) {
-                    JOptionPane.showMessageDialog(null,"Password Succesfully Changed");
-                }else
-                    JOptionPane.showMessageDialog(null,"Problem Changing Password!");
-                statement.close();         
-            }catch(Exception e){
+                    JOptionPane.showMessageDialog(null, "Password Succesfully Changed");
+                    setVisible(false);
+                    LoginPage ob = new LoginPage();
+                    ob.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Problem Changing Password!");
+                }
+                statement.close();
+                conn.close();
+            } catch (NullPointerException e) {
+                JOptionPane.showMessageDialog(null, "Please Enter a Password");
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, e);
             }
-        }
-        else{
-            JOptionPane.showMessageDialog(null,"Answer Security Question Correctly");
+        } else {
+            JOptionPane.showMessageDialog(null, "Answer Security Question Correctly");
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -110,6 +122,8 @@ public class ForgotPassword extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ForgotPage", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Calibri", 1, 24), new java.awt.Color(255, 51, 51))); // NOI18N
 
         jLabel5.setText("New Password");
+
+        jTextField2.setEditable(false);
 
         jButton1.setText("Search");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -145,6 +159,7 @@ public class ForgotPassword extends javax.swing.JFrame {
             }
         });
 
+        jTextField3.setEditable(false);
         jTextField3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField3ActionPerformed(evt);
@@ -247,7 +262,8 @@ public class ForgotPassword extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        pack();
+        setSize(new java.awt.Dimension(545, 477));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -268,6 +284,7 @@ public class ForgotPassword extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         Retrive();
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

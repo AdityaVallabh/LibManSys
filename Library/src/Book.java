@@ -1,6 +1,6 @@
 
 public class Book {
-    
+
     private final String title, author;
     private final int id;
 
@@ -8,7 +8,7 @@ public class Book {
         this.title = title;
         this.author = author;
         this.id = id;
-    }   
+    }
 
     @Override
     public String toString() {
@@ -26,5 +26,5 @@ public class Book {
     public int getId() {
         return id;
     }
-    
+
 }

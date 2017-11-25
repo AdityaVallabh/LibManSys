@@ -1,21 +1,12 @@
 
 import java.sql.*;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author root
- */
 public class StudentForm extends javax.swing.JFrame {
 
-           Connection conn = null;
-           PreparedStatement pst = null;
-           ResultSet rs;
+    Connection conn = null;
+    PreparedStatement pst = null;
+    ResultSet rs;
+
     /**
      * Creates new form StudentForm
      */
@@ -128,25 +119,26 @@ public class StudentForm extends javax.swing.JFrame {
             .addComponent(jDesktopPane1)
         );
 
-        pack();
+        setSize(new java.awt.Dimension(396, 329));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         setVisible(false);
-        LoginPage ob= new LoginPage();
+        LoginPage ob = new LoginPage();
         ob.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         setVisible(false);
-        ReturnBook ob= new ReturnBook();
+        ReturnBook ob = new ReturnBook();
         ob.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         setVisible(false);
-        BrowseBook ob= new BrowseBook();
+        BrowseBook ob = new BrowseBook();
         ob.setVisible(true);// TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 

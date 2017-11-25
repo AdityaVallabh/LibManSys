@@ -2,51 +2,45 @@
 import java.sql.*;
 import javax.swing.JOptionPane;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author Loner
- */
 public class LoginPage extends javax.swing.JFrame {
-    
-           Connection conn = null;
-           PreparedStatement pst = null;
-           ResultSet rs;
+
+    Connection conn = null;
+    PreparedStatement pst = null;
+    ResultSet rs;
+
     /**
      * Creates new form LoginPage
      */
     public LoginPage() {
-        DBConnect db= new DBConnect();
-        conn = db.DBConnect();
+        conn = Session.getConn();
         initComponents();
     }
-    public int Validate(){
-        String s1=jTextField1.getText();
-        String s2=jPasswordField1.getText();
-        String sq1="select * from Account where Username='"+s1+"'";
-        try{
-            if(s1.equals("admin")&&s2.equals("library123")){
+
+    public int Validate() {
+        String s1 = jTextField1.getText();
+        String s2 = jPasswordField1.getText();
+        String sq1 = "select * from Account where Username='" + s1 + "'";
+        try {
+            if (s1.equals("admin") && s2.equals("library123")) {
+                Session.setUsername("admin");
                 return 1;
             }
-            pst=conn.prepareStatement(sq1);
-            rs=pst.executeQuery();
-        if(rs.next()){
-            if(s1.equals(rs.getString(1))&&s2.equals(rs.getString(5))){
-                return 2;
-            }
-            rs.close();
-            pst.close();
-        }
-        }catch(Exception e){
-                    JOptionPane.showMessageDialog(null, e);
+            pst = conn.prepareStatement(sq1);
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                if (s1.equals(rs.getString(1)) && s2.equals(rs.getString(5))) {
+                    Session.setUsername(rs.getString(1));
+                    return 2;
                 }
+                rs.close();
+                pst.close();
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
         return 0;
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -122,6 +116,12 @@ public class LoginPage extends javax.swing.JFrame {
         });
 
         jLabel3.setText("UserName");
+
+        jPasswordField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jPasswordField1ActionPerformed(evt);
+            }
+        });
 
         jLayeredPane1.setLayer(button1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane1.setLayer(jLabel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -212,21 +212,24 @@ public class LoginPage extends javax.swing.JFrame {
                 .addContainerGap(58, Short.MAX_VALUE))
         );
 
-        pack();
+        setSize(new java.awt.Dimension(444, 323));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
-       if(Validate()==2){
-           setVisible(false);
-           StudentForm ob= new StudentForm();
-           ob.setVisible(true);
-       }
-       else if(Validate()==1){
-           setVisible(false);
-           Signup ob= new Signup();
-           ob.setVisible(true);
-       }else JOptionPane.showMessageDialog(null, "Invalid Credentials");
-                // TODO add your handling code here:
+        if (Validate() == 2) {
+            setVisible(false);
+            StudentForm ob = new StudentForm();
+            ob.setVisible(true);
+            //Session s
+        } else if (Validate() == 1) {
+            setVisible(false);
+            AdminPage ob = new AdminPage();
+            ob.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "Invalid Credentials");
+        }
+        // TODO add your handling code here:
     }//GEN-LAST:event_button1ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -235,16 +238,21 @@ public class LoginPage extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         setVisible(false);
-        ForgotPassword ob= new ForgotPassword();
+        ForgotPassword ob = new ForgotPassword();
         ob.setVisible(true);
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-            setVisible(false);
-        Signup ob= new Signup();
+        setVisible(false);
+        Signup ob = new Signup();
         ob.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jPasswordField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordField1ActionPerformed
+        // TODO add your handling code here:
+        button1ActionPerformed(null);
+    }//GEN-LAST:event_jPasswordField1ActionPerformed
 
     /**
      * @param args the command line arguments
