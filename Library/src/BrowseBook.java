@@ -1,11 +1,9 @@
 
-import java.awt.List;
 import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
-import javax.swing.ListModel;
 
 public class BrowseBook extends javax.swing.JFrame {
 
@@ -237,7 +235,7 @@ public class BrowseBook extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         conn = Session.getConn();//DBConnect.DBConnect();
-        allBooks.forEach((book) -> {
+        for (Book book : allBooks) {
             try {
                 if (book.toString().equals(jList2.getSelectedValue())) {
                     String query = "update books set available = 'False', owner = ?, IssuedOn = ? where id = ?";
@@ -255,7 +253,7 @@ public class BrowseBook extends javax.swing.JFrame {
             } catch (SQLException e) {
                 System.out.println(e);
             }
-        });
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jList2ValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jList2ValueChanged
@@ -286,13 +284,13 @@ public class BrowseBook extends javax.swing.JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
-        allBooks.forEach((book) -> {
+        for (Book book : allBooks) {
             if ((jRadioButton2.isSelected() && book.getId() == Integer.parseInt(jTextField1.getText()))
                     || (jRadioButton1.isSelected() && book.getTitle().toLowerCase().contains(jTextField1.getText().toLowerCase()))
                     || (jRadioButton3.isSelected() && book.getAuthor().toLowerCase().contains(jTextField1.getText().toLowerCase()))) {
                 listBooks.add(i, book.toString());
             }
-        });
+        }
 
         jList2.setModel(listBooks);
 
