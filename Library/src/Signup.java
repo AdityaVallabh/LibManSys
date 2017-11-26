@@ -268,7 +268,7 @@ public class Signup extends javax.swing.JFrame {
         }
 
         try {
-            String sql = "Insert into Account (Username,Name,SecQue,Answer,Password,SubType) values (?,?,?,?,?,?) ";
+            String sql = "Insert into Account (Username,Name,SecQue,Answer,Password,SubType,Dues) values (?,?,?,?,?,?,?) ";
             pst = conn.prepareStatement(sql);
             pst.setString(1, jTextField1.getText());
             pst.setString(2, jTextField2.getText());
@@ -276,6 +276,7 @@ public class Signup extends javax.swing.JFrame {
             pst.setString(4, jTextField3.getText());
             pst.setString(5, jPasswordField1.getText());
             pst.setString(6, (jRadioButton2.isSelected()) ? "Regular" : "Golden");
+            pst.setInt(7, 0);
             pst.execute();
             JOptionPane.showMessageDialog(null, "New Account has been created");
             pst.close();

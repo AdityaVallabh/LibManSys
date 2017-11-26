@@ -1,4 +1,5 @@
 
+import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -55,21 +56,29 @@ public class ReturnBook extends javax.swing.JFrame {
         long diff = now.getTime() - date.getTime();
         long daysBorrowed = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
         long penalty = 0;
-        
-        if(Session.getSubType().equals("Regular")){
-            if(daysBorrowed > 21){
+
+        if (Session.getSubType().equals("Regular")) {
+            if (daysBorrowed > 21) {
                 penalty = (daysBorrowed - 21) * 5;
             }
-        } else{
-            if(daysBorrowed > 92){
+        } else {
+            if (daysBorrowed > 92) {
                 penalty = (daysBorrowed - 92) * 4;
             }
         }
-        
-        if(penalty > 0){
-            
+
+        if (penalty > 0) {
+            try {
+                String query = "update Account set Dues = Dues+"+penalty+" WHERE Username = ?";
+                    PreparedStatement preparedStmt = conn.prepareStatement(query);
+                    preparedStmt.setString(1, Session.getUsername());
+                    preparedStmt.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "You have pending Dues!");
+            } catch (HeadlessException | SQLException e) {
+                System.out.println("Error in setting dues " + e);
+            }
         }
-        
+
     }
 
     /**
