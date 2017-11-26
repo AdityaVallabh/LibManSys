@@ -4,7 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
@@ -23,8 +25,8 @@ public class ReturnBook extends javax.swing.JFrame {
         initComponents();
         getData();
     }
-    
-    private void getData(){
+
+    private void getData() {
         listBooks = new DefaultListModel<>();
         allBooks = new ArrayList<>();
         int i = 0;
@@ -46,6 +48,28 @@ public class ReturnBook extends javax.swing.JFrame {
         }
 
         jList1.setModel(listBooks);
+    }
+
+    private void setDues(Timestamp date) {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        long diff = now.getTime() - date.getTime();
+        long daysBorrowed = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        long penalty = 0;
+        
+        if(Session.getSubType().equals("Regular")){
+            if(daysBorrowed > 21){
+                penalty = (daysBorrowed - 21) * 5;
+            }
+        } else{
+            if(daysBorrowed > 92){
+                penalty = (daysBorrowed - 92) * 4;
+            }
+        }
+        
+        if(penalty > 0){
+            
+        }
+        
     }
 
     /**
@@ -154,6 +178,16 @@ public class ReturnBook extends javax.swing.JFrame {
         for (Book book : allBooks) {
             try {
                 if (book.toString().equals(jList1.getSelectedValue())) {
+                    rs = pst.executeQuery("SELECT IssuedOn FROM Books WHERE id = " + book.getId());
+                    while (rs.next()) {
+                        //java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        //System.out.println(rs.getString("IssuedOn"));
+                        setDues(rs.getTimestamp("IssuedOn"));
+                        //Timestamp now = new Timestamp(System.currentTimeMillis());
+                        //System.out.println(sdf.format(date));
+
+                    }
+
                     String query = "update books set available = 'True', owner = ?, IssuedOn = ? where id = ?";
                     PreparedStatement preparedStmt = conn.prepareStatement(query);
                     preparedStmt.setString(1, "");
@@ -162,6 +196,7 @@ public class ReturnBook extends javax.swing.JFrame {
                     preparedStmt.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Returned book " + book.getTitle());
                     getData();
+
                 }
             } catch (SQLException e) {
                 System.out.println(e);

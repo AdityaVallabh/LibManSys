@@ -30,6 +30,7 @@ public class LoginPage extends javax.swing.JFrame {
             if (rs.next()) {
                 if (s1.equals(rs.getString(1)) && s2.equals(rs.getString(5))) {
                     Session.setUsername(rs.getString(1));
+                    Session.setSubType(rs.getString("SubType"));
                     return 2;
                 }
                 rs.close();
